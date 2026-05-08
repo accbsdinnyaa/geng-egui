@@ -116,7 +116,7 @@ impl EguiGeng {
                     });
                     if let Some(mut symbol) = key_char(key) {
                         if modifiers.shift {
-                            symbol = symbol.to_uppercase().next().unwrap();
+                            symbol = with_shift(symbol);
                         }
                         self.egui_input
                             .events
@@ -339,5 +339,40 @@ fn key_char(key: egui::Key) -> Option<char> {
         egui::Key::Semicolon => Some(';'),
         egui::Key::Quote => Some('"'),
         _ => None,
+    }
+}
+
+fn with_shift(c: char) -> char {
+    if c.is_ascii_alphabetic() {
+        c.to_uppercase().next().unwrap()
+    } else if c.is_ascii_digit() {
+        match c {
+            '0' => ')',
+            '1' => '!',
+            '2' => '@',
+            '3' => '#',
+            '4' => '$',
+            '5' => '%',
+            '6' => '^',
+            '7' => '&',
+            '8' => '*',
+            '9' => '(',
+            _ => unreachable!(),
+        }
+    } else {
+        match c {
+            ',' => '<',
+            '\\' => '|',
+            '/' => '?',
+            '[' => '{',
+            ']' => '}',
+            '`' => '~',
+            '-' => '_',
+            '.' => '>',
+            '=' => '+',
+            ';' => ':',
+            '"' => ' ',
+            c => c,
+        }
     }
 }
